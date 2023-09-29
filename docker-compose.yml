@@ -1,21 +1,31 @@
 services:
   web:
     build: .
-    command: python /code/manage.py runserver 0.0.0.0:8000
+    # command: python /code/manage.py runserver 0.0.0.0:8000
+    command: gunicorn django_project.wsgi -b 0.0.0.0:8000
     volumes:
-    - .:/code
+      - .:/code
     ports:
-    - 8000:8000
+      - 8000:8000
     depends_on:
-    - db
-    - redis
+      - db
+      - redis
+    environment:
+     - DEBUG=1
+     - SECRET_KEY=django-insecure-)4%w&#)+a*f(os@r8p44i%)z=f7*#qj8rl*98%27-yjvm32^nm
+     - DJANGO_SECURE_SSL_REDIRECT=False
+     - DJANGO_SECURE_HSTS_SECONDS=0
+     - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False
+     - DJANGO_SECURE_HSTS_PRELOAD=False
+     - DJANGO_SESSION_COOKIE_SECURE=False
+     - DJANGO_CSRF_COOKIE_SECURE=False
 
   db:
     image: postgres:15
     volumes:
-    - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     environment:
-    - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
 
   redis:
     image: redis:alpine
@@ -27,7 +37,7 @@ services:
       - .:/code
     environment:
       - DEBUG=1
-      - SECRET_KEY=dbaa1_i7%*3r9-=z-+_mz4r-!qeed@(-a_r(g@k8jo8y3r27%m
+      - SECRET_KEY=django-insecure-)4%w&#)+a*f(os@r8p44i%)z=f7*#qj8rl*98%27-yjvm32^nm
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
     depends_on:
       - redis
@@ -39,7 +49,7 @@ services:
       - .:/code
     environment:
       - DEBUG=1
-      - SECRET_KEY=dbaa1_i7%*3r9-=z-+_mz4r-!qeed@(-a_r(g@k8jo8y3r27%m
+      - SECRET_KEY=django-insecure-)4%w&#)+a*f(os@r8p44i%)z=f7*#qj8rl*98%27-yjvm32^nm
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
     depends_on:
       - redis
